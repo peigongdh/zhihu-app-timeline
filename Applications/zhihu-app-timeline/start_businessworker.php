@@ -24,10 +24,7 @@ $worker->name = 'zhihu-app-timeline-business-worker';
 
 $worker->count = 4;
 
-$worker->registerAddress = '127.0.0.1:11238';
-
-$worker->eventHandler = 'BusinessEvent';
-
+$worker->registerAddress = '127.0.0.1:11110';
 
 if(!defined('GLOBAL_START')) {
     Worker::runAll();

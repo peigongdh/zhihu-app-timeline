@@ -19,18 +19,18 @@ use \GatewayWorker\BusinessWorker;
 use \Workerman\Autoloader;
 
 
-$gateway = new Gateway("websocket://0.0.0.0:8282");
+$gateway = new Gateway("Websocket://0.0.0.0:11130");
 
 $gateway->name = 'zhihu-app-timeline-gateway';
 
 $gateway->count = 2;
 
-$gateway->lanIp = '127.0.0.1';
+$gateway->lanIp = '192.168.3.5';
 // 内部通讯起始端口，假如$gateway->count=4，起始端口为4000
 // 则一般会使用4000 4001 4002 4003 4个端口作为内部通讯端口 
-$gateway->startPort = 2900;
+$gateway->startPort = 11120;
 
-$gateway->registerAddress = '127.0.0.1:11238';
+$gateway->registerAddress = '127.0.0.1:11110';
 
 // 心跳间隔
 //$gateway->pingInterval = 10;

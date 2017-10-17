@@ -15,7 +15,7 @@
 use \Workerman\Worker;
 use \GatewayWorker\Register;
 
-$register = new Register('text://0.0.0.0:11238');
+$register = new Register('text://0.0.0.0:11110');
 
 if (!defined('GLOBAL_START')) {
     Worker::runAll();
