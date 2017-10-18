@@ -25,17 +25,17 @@ $gateway->name = 'zhihu-app-timeline-gateway';
 
 $gateway->count = 2;
 
-$gateway->lanIp = '192.168.3.5';
-// 内部通讯起始端口，假如$gateway->count=4，起始端口为4000
-// 则一般会使用4000 4001 4002 4003 4个端口作为内部通讯端口 
+$gateway->lanIp = '192.168.78.72';
+
 $gateway->startPort = 11120;
 
 $gateway->registerAddress = '127.0.0.1:11110';
 
-// 心跳间隔
-//$gateway->pingInterval = 10;
-// 心跳数据
-//$gateway->pingData = '{"type":"ping"}';
+$gateway->pingInterval = 10;
+
+$gateway->pingData = '{"type":"ping"}';
+
+$gateway->pingNotResponseLimit = 0;
 
 /* 
 // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调

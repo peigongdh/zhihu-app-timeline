@@ -27,8 +27,8 @@ class Events
     public static function onWorkerStart($worker)
     {
         echo $worker->id . " start \n";
-        self::$db = new Workerman\MySQL\Connection('192.168.3.5', '3306', 'root', 'zhangpei', 'zhihu');
-        self::$redis = new Predis\Client('tcp://192.168.3.5:6379');
+        // self::$db = new Workerman\MySQL\Connection('192.168.3.5', '3306', 'root', 'zhangpei', 'zhihu');
+        // self::$redis = new Predis\Client('tcp://192.168.3.5:6379');
         // Timer::add(3, array(self::class, 'consume_actions'));
     }
 
@@ -43,7 +43,7 @@ class Events
 
     public static function onMessage($client_id, $message)
     {
-        echo $client_id . " on message \n";
+
     }
 
     public static function onClose($client_id)
@@ -65,7 +65,6 @@ class Events
             }
             sleep(1);
         }
-
     }
 
     public static function pull_action($userId, $actionId)
