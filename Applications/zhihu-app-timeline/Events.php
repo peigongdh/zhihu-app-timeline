@@ -22,21 +22,28 @@ class Events
 
     public static $redis = null;
 
+    public static $onlineUsers = [];
+
     public static $TIMELINE_KEY = 'TIMELINE';
+
+    public static $TIMER_SECONDS = 1;
+
+    public static $MESSAGE_TYPE_INIT = 'init';
+
+    public static $MESSAGE_TYPE_ACTION = 'action';
 
     public static function onWorkerStart($worker)
     {
-        echo $worker->id . " start \n";
-        // self::$db = new Workerman\MySQL\Connection('192.168.3.5', '3306', 'root', 'zhangpei', 'zhihu');
-        // self::$redis = new Predis\Client('tcp://192.168.3.5:6379');
-        // Timer::add(3, array(self::class, 'consume_actions'));
+        self::$db = new Workerman\MySQL\Connection('192.168.3.5', '3306', 'root', 'zhangpei', 'zhihu');
+        self::$redis = new Predis\Client('tcp://192.168.3.5:6379');
+        Timer::add(self::$TIMER_SECONDS, array(self::class, 'consume_actions'), true);
     }
 
     public static function onConnect($client_id)
     {
-        echo $client_id . " connect \n";
+        echo "connection from $client_id\n";
         Gateway::sendToClient($client_id, json_encode(array(
-            'type' => 'init',
+            'type' => self::$MESSAGE_TYPE_INIT,
             'client_id' => $client_id
         )));
     }
@@ -53,17 +60,13 @@ class Events
 
     public static function consume_actions()
     {
-        while (true) {
-            echo "loop \n";
-            $actionsJson = self::$redis->lpop(self::$TIMELINE_KEY);
-            if ($actionsJson) {
-                $action = json_decode($actionsJson, true);
-                $followerIds = self::get_user_followers($action['user_id']);
-                foreach ($followerIds as $followerId) {
-                    self::pull_action($followerId['follower_id'], $action['action_id']);
-                }
+        $actionsJson = self::$redis->lpop(self::$TIMELINE_KEY);
+        if ($actionsJson) {
+            $action = json_decode($actionsJson, true);
+            $followerIds = self::get_user_followers($action['user_id']);
+            foreach ($followerIds as $followerId) {
+                self::pull_action($followerId['follower_id'], $action['action_id']);
             }
-            sleep(1);
         }
     }
 
@@ -72,7 +75,20 @@ class Events
         $insertId = self::$db->insert('timelines')->cols([
             'user_id' => $userId,
             'action_id' => $actionId,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
         ])->query();
+
+        $isUserOnline = Gateway::isUidOnline($userId);
+        if ($isUserOnline) {
+            Gateway::sendToUid($userId, json_encode([
+                'type' => self::$MESSAGE_TYPE_ACTION,
+                'data' => [
+                    'user_id' => $userId,
+                    'action_id' => $actionId,
+                ]
+            ]));
+        }
         return $insertId;
     }
 
