@@ -34,8 +34,13 @@ class Events
 
     public static function onWorkerStart($worker)
     {
-        self::$db = new Workerman\MySQL\Connection('192.168.3.5', '3306', 'root', 'zhangpei', 'zhihu');
-        self::$redis = new Predis\Client('tcp://192.168.3.5:6379');
+        $config = require('config.php');
+        self::$db = new Workerman\MySQL\Connection($config['mysql']['host'], $config['mysql']['port'], $config['mysql']['db_username'], $config['mysql']['db_password'], $config['mysql']['db_name']);
+        self::$redis = new Predis\Client([
+            'scheme' => 'tcp',
+            'host' => $config['redis']['host'],
+            'port' => $config['redis']['port'],
+        ]);
         Timer::add(self::$TIMER_SECONDS, array(self::class, 'consume_actions'), true);
     }
 

@@ -18,8 +18,19 @@ use \GatewayWorker\Gateway;
 use \GatewayWorker\BusinessWorker;
 use \Workerman\Autoloader;
 
+$config = require('config.php');
 
-$gateway = new Gateway("Websocket://0.0.0.0:11130");
+$context = array(
+    'ssl' => array(
+        'local_cert'  => $config['ssl']['local_cert'],
+        'local_pk'    => $config['ssl']['local_pk'],
+        'verify_peer' => false,
+    )
+);
+
+$gateway = new Gateway("websocket://0.0.0.0:11130", $context);
+
+$gateway->transport = 'ssl';
 
 $gateway->name = 'zhihu-app-timeline-gateway';
 
@@ -36,6 +47,7 @@ $gateway->pingInterval = 10;
 $gateway->pingData = '{"type":"ping"}';
 
 $gateway->pingNotResponseLimit = 0;
+
 
 /* 
 // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调
