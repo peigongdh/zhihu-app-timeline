@@ -25,7 +25,7 @@ $gateway->name = 'zhihu-app-timeline-gateway';
 
 $gateway->count = 2;
 
-$gateway->lanIp = '192.168.3.5';
+$gateway->lanIp = '127.0.0.1';
 
 $gateway->startPort = 11120;
 

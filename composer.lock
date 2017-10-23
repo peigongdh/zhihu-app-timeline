@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "16000969c23b38393f2a84fcd32f4eb4",
     "content-hash": "b6595efdee0aaadc01a7572f1726c747",
     "packages": [
         {
@@ -54,7 +55,7 @@
                 "predis",
                 "redis"
             ],
-            "time": "2016-06-16T16:22:20+00:00"
+            "time": "2016-06-16 16:22:20"
         },
         {
             "name": "workerman/gateway-worker",
@@ -88,7 +89,7 @@
                 "communication",
                 "distributed"
             ],
-            "time": "2017-06-26T14:49:54+00:00"
+            "time": "2017-06-26 14:49:54"
         },
         {
             "name": "workerman/mysql",
@@ -126,7 +127,7 @@
                 "pdo",
                 "pdo_mysql"
             ],
-            "time": "2017-03-18T01:48:33+00:00"
+            "time": "2017-03-18 01:48:33"
         },
         {
             "name": "workerman/workerman",
@@ -174,7 +175,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2017-08-25T08:26:28+00:00"
+            "time": "2017-08-25 08:26:28"
         }
     ],
     "packages-dev": [],
