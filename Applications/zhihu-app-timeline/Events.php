@@ -26,7 +26,7 @@ class Events
 
     public static $TIMELINE_KEY = 'TIMELINE';
 
-    public static $TIMER_SECONDS = 1;
+    public static $TIMER_SECONDS = 10;
 
     public static $MESSAGE_TYPE_INIT = 'init';
 
@@ -64,16 +64,17 @@ class Events
     }
 
     public static function consume_actions()
-    {	
-	// bug need fix, here we can only consume one item int the queue every times
-        $actionsJson = self::$redis->lpop(self::$TIMELINE_KEY);
-        if ($actionsJson) {
-            $action = json_decode($actionsJson, true);
-            $followerIds = self::get_user_followers($action['user_id']);
-            foreach ($followerIds as $followerId) {
-                self::pull_action($followerId['follower_id'], $action['action_id']);
+    {
+        do {
+            $actionsJson = self::$redis->lpop(self::$TIMELINE_KEY);
+            if ($actionsJson) {
+                $action = json_decode($actionsJson, true);
+                $followerIds = self::get_user_followers($action['user_id']);
+                foreach ($followerIds as $followerId) {
+                    self::pull_action($followerId['follower_id'], $action['action_id']);
+                }
             }
-        }
+        } while ($actionsJson);
     }
 
     public static function pull_action($userId, $actionId)
