@@ -64,7 +64,8 @@ class Events
     }
 
     public static function consume_actions()
-    {
+    {	
+	// bug need fix, here we can only consume one item int the queue every times
         $actionsJson = self::$redis->lpop(self::$TIMELINE_KEY);
         if ($actionsJson) {
             $action = json_decode($actionsJson, true);
